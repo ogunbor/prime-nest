@@ -12,9 +12,13 @@ pub use contexts::*;
 pub mod prime_nest {
     use super::*;
 
-    pub fn initialize(ctx: Context<Make>, lock_duration: i64, amount: u64) -> Result<()> {
+    pub fn initialize_vault(ctx: Context<Make>, lock_duration: i64, amount: u64) -> Result<()> {
         ctx.accounts.initialize_vault(lock_duration, &ctx.bumps)?;
         ctx.accounts.deposit(amount)
+    }
+
+    pub fn initialize_rewards_config(ctx: Context<InitializeRewardsConfig>) -> Result<()> {
+        ctx.accounts.initialize_rewards_config(&ctx.bumps)
     }
 
     pub fn premature_close(ctx: Context<PrematureClose>) -> Result<()> {
