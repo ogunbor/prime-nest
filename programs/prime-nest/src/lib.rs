@@ -25,4 +25,9 @@ pub mod prime_nest {
         ctx.accounts.premature_close()?;
         Ok(())
     }
+
+    pub fn take(ctx: Context<ClaimAndClose>) -> Result<()> {
+        ctx.accounts.claim_rewards_and_close()?;
+        Ok(())
+    }
 }
