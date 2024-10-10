@@ -16,4 +16,9 @@ pub mod prime_nest {
         ctx.accounts.initialize_vault(lock_duration, &ctx.bumps)?;
         ctx.accounts.deposit(amount)
     }
+
+    pub fn premature_close(ctx: Context<PrematureClose>) -> Result<()> {
+        ctx.accounts.premature_close()?;
+        Ok(())
+    }
 }

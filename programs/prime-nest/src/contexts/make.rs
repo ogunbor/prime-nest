@@ -34,6 +34,7 @@ impl<'info> Make<'info> {
         self.state.set_inner(VaultState {
             user: self.user.key(),
             expiration: Clock::get()?.unix_timestamp + lock_duration,
+            amount: 0,
             vault_bump: bumps.vault,
             state_bump: bumps.state,
         });
