@@ -12,7 +12,7 @@ pub use contexts::*;
 pub mod prime_nest {
     use super::*;
 
-    pub fn initialize_vault(ctx: Context<Make>, lock_duration: i64, amount: u64) -> Result<()> {
+    pub fn make(ctx: Context<Make>, lock_duration: i64, amount: u64) -> Result<()> {
         ctx.accounts.initialize_vault(lock_duration, &ctx.bumps)?;
         ctx.accounts.deposit(amount)
     }
