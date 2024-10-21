@@ -20,7 +20,7 @@ pub struct InitializeRewardsConfig<'info> {
         payer = admin,
         seeds = [b"rewards".as_ref(), config.key().as_ref()],
         bump,
-        mint::decimals = 6,
+        mint::decimals = 12,
         mint::authority = config,
     )]
     pub rewards_mint: Account<'info, Mint>,
