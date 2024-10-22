@@ -36,18 +36,19 @@ pub struct ClaimAndClose<'info> {
     pub config: Account<'info, RewardsConfig>,
     #[account(
         mut,
-        seeds = [b"vault", state.key().as_ref()],
-        bump = state.vault_bump,
-    )]
-    pub vault: SystemAccount<'info>,
-    #[account(
-        mut,
         seeds = [b"state", user.key().as_ref()],
         bump = state.state_bump,
         close = user,
         has_one = user,
     )]
     pub state: Account<'info, VaultState>,
+    #[account(
+        mut,
+        seeds = [b"vault", state.key().as_ref()],
+        bump = state.vault_bump,
+    )]
+    pub vault: SystemAccount<'info>,
+
     pub token_program: Program<'info, Token>,
     pub associated_token_program: Program<'info, AssociatedToken>,
     pub system_program: Program<'info, System>,
