@@ -9,18 +9,18 @@ pub struct PrematureClose<'info> {
     pub user: Signer<'info>,
     #[account(
         mut,
-        seeds = [b"vault", state.key().as_ref()],
-        bump = state.vault_bump,
-    )]
-    pub vault: SystemAccount<'info>,
-    #[account(
-        mut,
         seeds = [b"state", user.key().as_ref()],
         bump = state.state_bump,
         close = user,
         has_one = user,
     )]
     pub state: Account<'info, VaultState>,
+    #[account(
+        mut,
+        seeds = [b"vault", state.key().as_ref()],
+        bump = state.vault_bump,
+    )]
+    pub vault: SystemAccount<'info>,
     /// CHECK: Admin's wallet is used only for transfer purposes and does not require validation.
     pub admin_wallet: UncheckedAccount<'info>,
     pub system_program: Program<'info, System>,
