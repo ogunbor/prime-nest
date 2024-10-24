@@ -22,12 +22,10 @@ pub mod prime_nest {
     }
 
     pub fn premature_close(ctx: Context<PrematureClose>) -> Result<()> {
-        ctx.accounts.premature_close()?;
-        Ok(())
+        ctx.accounts.premature_close()
     }
 
     pub fn take(ctx: Context<ClaimAndClose>) -> Result<()> {
-        ctx.accounts.claim_rewards_and_close()?;
-        Ok(())
+        ctx.accounts.claim_rewards_and_close()
     }
 }
