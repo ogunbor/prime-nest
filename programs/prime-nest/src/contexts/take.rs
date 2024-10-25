@@ -37,15 +37,15 @@ pub struct ClaimAndClose<'info> {
     #[account(
         mut,
         seeds = [b"state", user.key().as_ref()],
-        bump = state.state_bump,
+        bump = vault_state.state_bump,
         close = user,
         has_one = user,
     )]
-    pub state: Account<'info, VaultState>,
+    pub vault_state: Account<'info, VaultState>,
     #[account(
         mut,
-        seeds = [b"vault", state.key().as_ref()],
-        bump = state.vault_bump,
+        seeds = [b"vault", vault_state.key().as_ref()],
+        bump = vault_state.vault_bump,
     )]
     pub vault: SystemAccount<'info>,
 
@@ -72,8 +72,8 @@ impl<'info> ClaimAndClose<'info> {
 
         mint_to(
             ctx,
-            self.state.amount as u64
-                * self.state.expiration as u64
+            self.vault_state.amount as u64
+                * self.vault_state.expiration as u64
                 * 10_u64.pow(self.rewards_mint.decimals as u32),
         )?;
 
@@ -84,7 +84,7 @@ impl<'info> ClaimAndClose<'info> {
         let current_timestamp = clock.unix_timestamp;
         // Ensure the vault has reached its expiration time
         require!(
-            current_timestamp >= self.state.expiration,
+            current_timestamp >= self.vault_state.expiration,
             VaultError::VaultNotYetExpired
         );
 
@@ -97,8 +97,8 @@ impl<'info> ClaimAndClose<'info> {
 
         let seeds = &[
             b"vault",
-            self.state.to_account_info().key.as_ref(),
-            &[self.state.vault_bump],
+            self.vault_state.to_account_info().key.as_ref(),
+            &[self.vault_state.vault_bump],
         ];
 
         let signer_seeds = &[&seeds[..]];
