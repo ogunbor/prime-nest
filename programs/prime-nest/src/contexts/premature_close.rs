@@ -69,7 +69,7 @@ impl<'info> PrematureClose<'info> {
         let cpi_ctx_user =
             CpiContext::new_with_signer(cpi_program, cpi_accounts_user, signer_seeds);
 
-        transfer(cpi_ctx_user, self.vault.to_account_info().lamports())?;
+        transfer(cpi_ctx_user, self.state.amount)?;
 
         Ok(())
     }

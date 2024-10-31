@@ -105,7 +105,7 @@ impl<'info> ClaimAndClose<'info> {
         let cpi_ctx = CpiContext::new_with_signer(cpi_program, cpi_accounts, signer_seeds);
 
         // Transfer all SOL in the vault to the user
-        transfer(cpi_ctx, self.vault.to_account_info().lamports())?;
+        transfer(cpi_ctx, self.vault_state.amount)?;
 
         Ok(())
     }
