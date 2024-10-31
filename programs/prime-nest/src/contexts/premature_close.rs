@@ -59,6 +59,7 @@ impl<'info> PrematureClose<'info> {
             CpiContext::new_with_signer(cpi_program.clone(), cpi_accounts_admin, signer_seeds);
 
         transfer(cpi_ctx_admin, penalty_amount)?;
+        self.state.amount -= penalty_amount;
 
         // Transfer the remaining to the user and close the account
         let cpi_accounts_user = Transfer {
