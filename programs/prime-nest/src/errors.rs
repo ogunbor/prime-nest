@@ -18,4 +18,8 @@ pub enum VaultError {
     NoRewardsAccess,
     #[msg("Failed to CPI")]
     CPIFailed,
+    #[msg("Invalid hex")]
+    InvalidHex,
+    #[msg("Invalid price conversion")]
+    InvalidPriceConversion,
 }
