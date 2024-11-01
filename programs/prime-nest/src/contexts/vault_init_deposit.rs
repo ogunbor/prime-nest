@@ -86,6 +86,9 @@ impl<'info> Make<'info> {
         let cpi_ctx = CpiContext::new(cpi_program, cpi_accounts);
 
         transfer(cpi_ctx, amount)?;
+
+        self.state.amount += amount;
+        assert_eq!(self.state.amount, amount);
         Ok(())
     }
 }

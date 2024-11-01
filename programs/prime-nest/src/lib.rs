@@ -12,7 +12,7 @@ pub use contexts::*;
 pub mod prime_nest {
     use super::*;
 
-    pub fn make(ctx: Context<Make>, lock_duration: i64, amount: u64) -> Result<()> {
+    pub fn vault_init_deposit(ctx: Context<Make>, lock_duration: i64, amount: u64) -> Result<()> {
         ctx.accounts.initialize_vault(lock_duration, &ctx.bumps)?;
         ctx.accounts.deposit(amount)
     }
@@ -25,7 +25,7 @@ pub mod prime_nest {
         ctx.accounts.premature_close()
     }
 
-    pub fn take(ctx: Context<ClaimAndClose>) -> Result<()> {
+    pub fn payout_operations(ctx: Context<ClaimAndClose>) -> Result<()> {
         ctx.accounts.claim_rewards_and_close()
     }
 }
