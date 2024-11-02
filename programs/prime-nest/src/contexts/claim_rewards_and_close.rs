@@ -1,5 +1,6 @@
 use crate::errors::VaultError;
 use crate::state::{RewardsConfig, VaultState};
+use crate::utils::get_feed_id_from_hex;
 use anchor_lang::{
     prelude::*,
     system_program::{transfer, Transfer},
@@ -8,7 +9,7 @@ use anchor_spl::{
     associated_token::AssociatedToken,
     token::{mint_to, Mint, MintTo, Token, TokenAccount},
 };
-use hex;
+
 use pyth_solana_receiver_sdk::price_update::PriceUpdateV2;
 
 #[derive(Accounts)]
@@ -139,11 +140,4 @@ impl<'info> ClaimAndClose<'info> {
 
         Ok(())
     }
-}
-
-// Helper function for parsing hex feed ID
-fn get_feed_id_from_hex(hex_str: &str) -> Result<[u8; 32]> {
-    let mut bytes = [0u8; 32];
-    hex::decode_to_slice(hex_str, &mut bytes).map_err(|_| error!(VaultError::InvalidHex))?;
-    Ok(bytes)
 }

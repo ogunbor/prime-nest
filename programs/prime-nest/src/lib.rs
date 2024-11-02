@@ -8,6 +8,9 @@ pub mod contexts;
 pub mod errors;
 pub use contexts::*;
 
+pub mod utils;
+
+
 #[program]
 pub mod prime_nest {
     use super::*;
