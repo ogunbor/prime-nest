@@ -87,7 +87,7 @@ impl<'info> Make<'info> {
 
         transfer(cpi_ctx, amount)?;
 
-        self.state.amount += amount;
+        self.state.amount = amount;
         Ok(())
     }
 }
