@@ -7,6 +7,7 @@ use anchor_lang::{
 };
 
 use pyth_solana_receiver_sdk::price_update::PriceUpdateV2;
+const LAMPORTS_PER_SOL: u64 = 1_000_000_000;
 
 #[derive(Accounts)]
 pub struct Make<'info> {
@@ -70,12 +71,10 @@ impl<'info> Make<'info> {
         Ok(())
     }
     pub fn deposit(&mut self, amount: u64) -> Result<()> {
-        let min_deposit: u64 = 1_000_000_000; //( 1 sol )
+        let min_deposit: u64 = LAMPORTS_PER_SOL; // Minimum deposit of 1 SOL
 
         // Ensure the deposit amount is at least 1 SOL
-        if amount < min_deposit {
-            return Err(VaultError::DepositTooSmall.into());
-        }
+        require!(amount >= min_deposit, VaultError::DepositTooSmall);
 
         let cpi_program = self.system_program.to_account_info();
 
@@ -89,7 +88,6 @@ impl<'info> Make<'info> {
         transfer(cpi_ctx, amount)?;
 
         self.state.amount += amount;
-        assert_eq!(self.state.amount, amount);
         Ok(())
     }
 }
