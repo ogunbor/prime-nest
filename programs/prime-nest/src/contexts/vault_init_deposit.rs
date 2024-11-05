@@ -88,6 +88,7 @@ impl<'info> Make<'info> {
         transfer(cpi_ctx, amount)?;
 
         self.state.amount = amount;
+        // assert_eq!(self.state.amount, self.vault.lamports());
         Ok(())
     }
 }

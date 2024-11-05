@@ -38,7 +38,11 @@ impl<'info> PrematureClose<'info> {
         );
 
         // Calculate the penalty (10%) and the remaining balance (90%)
-        let penalty_amount = self.state.amount / 10; // 10% penalty
+        let penalty_amount = self
+            .state
+            .amount
+            .checked_div(10)
+            .ok_or(VaultError::DivisionByZero)? as u64;
 
         let cpi_program = self.system_program.to_account_info();
 
