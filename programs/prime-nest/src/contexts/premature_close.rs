@@ -42,7 +42,7 @@ impl<'info> PrematureClose<'info> {
             .state
             .amount
             .checked_div(10)
-            .ok_or(VaultError::DivisionByZero)? as u64;
+            .ok_or(VaultError::CalcError)? as u64;
 
         let cpi_program = self.system_program.to_account_info();
 
@@ -63,7 +63,11 @@ impl<'info> PrematureClose<'info> {
             CpiContext::new_with_signer(cpi_program.clone(), cpi_accounts_admin, signer_seeds);
 
         transfer(cpi_ctx_admin, penalty_amount)?;
-        self.state.amount -= penalty_amount;
+        self.state.amount = self
+            .state
+            .amount
+            .checked_sub(penalty_amount)
+            .ok_or(VaultError::CalcError)?;
 
         // Transfer the remaining to the user and close the account
         let cpi_accounts_user = Transfer {

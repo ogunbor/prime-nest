@@ -22,6 +22,6 @@ pub enum VaultError {
     InvalidHex,
     #[msg("Invalid price conversion")]
     InvalidPriceConversion,
-    #[msg("Vault is empty")]
-    DivisionByZero,
+    #[msg("Something went wrong")]
+    CalcError,
 }
