@@ -8,7 +8,7 @@ pub struct InitializeRewardsConfig<'info> {
     #[account(mut)]
     pub admin: Signer<'info>,
     #[account(
-        init, 
+        init,
         payer = admin,
         seeds = [b"config".as_ref()],
         bump,
@@ -29,7 +29,10 @@ pub struct InitializeRewardsConfig<'info> {
 }
 
 impl<'info> InitializeRewardsConfig<'info> {
-    pub fn initialize_rewards_config(&mut self, bumps: &InitializeRewardsConfigBumps) -> Result<()> {
+    pub fn initialize_rewards_config(
+        &mut self,
+        bumps: &InitializeRewardsConfigBumps,
+    ) -> Result<()> {
         self.config.set_inner(RewardsConfig {
             rewards_bump: bumps.rewards_mint,
             bump: bumps.config,
