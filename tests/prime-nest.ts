@@ -1,35 +1,24 @@
 import * as anchor from "@coral-xyz/anchor";
 import { Program } from "@coral-xyz/anchor";
-import { PrimeNest } from '../target/types/prime_nest';
-import { PublicKey, Keypair, SystemProgram } from "@solana/web3.js";
-import { BN } from "bn.js";
+import { PrimeNest } from "../target/types/prime_nest";
 
-describe("anchor_vault_q3_2024", () => {
-  // Configure the client to use the local cluster.
-  const provider = anchor.AnchorProvider.env();
-  anchor.setProvider(provider);
+describe("prime_nest", () => {
+  anchor.setProvider(anchor.AnchorProvider.env());
 
-  const program = anchor.workspace.AnchorVaultQ32024 as Program<PrimeNest>;
-  
-  const vaultState = anchor.web3.PublicKey.findProgramAddressSync([Buffer.from("state"),
-  provider.publicKey.toBytes()],
-    program.programId)[0];
-    
-  const vault = anchor.web3.PublicKey.findProgramAddressSync([Buffer.from("vault"),
-  vaultState.toBytes()],
-    program.programId)[0];
-    
-  it("Is initialized!", async () => {
-    // Add your test here.
-    const tx = await program.methods.make().accountsPartial(
-      {
-        user: provider.wallet.publicKey,
-       // state,
-        vault,
-        systemProgram: anchor.web3.SystemProgram.programId,
-      }
-    ).rpc();
-    console.log("Your transaction signature", tx);
+  const program = anchor.workspace.PrimeNest as Program<PrimeNest>;
+
+ 
+  const lockDuration = 30 * 24 * 60 * 60; 
+  const minDeposit = new anchor.BN(0.2 * 1e9); 
+
+  it("Initializes the vault and makes a deposit", async () => {
+    try {
+      const tx = await program.methods
+        .vaultInitDeposit(new anchor.BN(lockDuration), minDeposit)
+        .rpc();
+      console.log("Vault initialization and deposit transaction signature:", tx);
+    } catch (error) {
+      console.error("Error during atomic vault initialization and deposit:", error);
+    }
   });
-  
 });
