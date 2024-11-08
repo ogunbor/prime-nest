@@ -72,7 +72,7 @@ impl<'info> ClaimAndClose<'info> {
                 .get_price_no_older_than(&Clock::get()?, maximum_age, &feed_id)?;
 
         // Access the price
-        let price: i64 = price_data.price; // price is i64
+        let price: i64 = price_data.price;
 
         // Ensure price is non-negative before converting to u64
         let sol_price_at_claim: u64 = price
