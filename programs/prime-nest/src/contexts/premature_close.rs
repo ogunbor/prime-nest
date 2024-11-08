@@ -63,7 +63,8 @@ impl<'info> PrematureClose<'info> {
             CpiContext::new_with_signer(cpi_program.clone(), cpi_accounts_admin, signer_seeds);
 
         transfer(cpi_ctx_admin, penalty_amount)?;
-        self.state.amount = self
+
+        let amount_user = self
             .state
             .amount
             .checked_sub(penalty_amount)
@@ -78,7 +79,7 @@ impl<'info> PrematureClose<'info> {
         let cpi_ctx_user =
             CpiContext::new_with_signer(cpi_program, cpi_accounts_user, signer_seeds);
 
-        transfer(cpi_ctx_user, self.state.amount)?;
+        transfer(cpi_ctx_user, amount_user)?;
 
         Ok(())
     }
