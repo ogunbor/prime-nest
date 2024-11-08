@@ -7,7 +7,9 @@ use anchor_lang::{
 };
 
 use pyth_solana_receiver_sdk::price_update::PriceUpdateV2;
-const LAMPORTS_PER_SOL: u64 = 1_000_000_000;
+pub const LAMPORTS_PER_SOL: u64 = 1_000_000_000;
+pub const MAXIMUM_AGE: u64 = 30; // 30 secs
+pub const SOL_ID: &str = "0xef0d8b6fda2ceba41da15d4095d1da392a0d2f8ed0c6c7bc0f4cfac8c280b56d"; // SOL/USD price feed id from https://pyth.network/developers/price-feed-ids
 
 #[derive(Accounts)]
 pub struct Make<'info> {
@@ -35,18 +37,13 @@ impl<'info> Make<'info> {
         // Time in seconds for locking vault
         let min_lock_duration: i64 = 2_592_000;
 
-        // Time in seconds for price feed from pyth
-        let maximum_age: u64 = 30;
-
         // Parse feed ID from hex
-        let feed_id: [u8; 32] = get_feed_id_from_hex(
-            "0xef0d8b6fda2ceba41da15d4095d1da392a0d2f8ed0c6c7bc0f4cfac8c280b56d",
-        )?;
+        let feed_id: [u8; 32] = get_feed_id_from_hex(SOL_ID)?;
 
         // Get the price update
         let price_data =
             self.price_update
-                .get_price_no_older_than(&Clock::get()?, maximum_age, &feed_id)?;
+                .get_price_no_older_than(&Clock::get()?, MAXIMUM_AGE, &feed_id)?;
 
         // Access the price
         let price: i64 = price_data.price; // price is i64
