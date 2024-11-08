@@ -10,7 +10,6 @@ pub use contexts::*;
 
 pub mod utils;
 
-
 #[program]
 pub mod prime_nest {
     use super::*;
