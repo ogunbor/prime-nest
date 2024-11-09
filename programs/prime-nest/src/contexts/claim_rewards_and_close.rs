@@ -9,8 +9,9 @@ use anchor_spl::{
     associated_token::AssociatedToken,
     token::{mint_to, Mint, MintTo, Token, TokenAccount},
 };
-
 use pyth_solana_receiver_sdk::price_update::PriceUpdateV2;
+
+use crate::constants::{MAXIMUM_AGE, SOL_ID};
 
 #[derive(Accounts)]
 pub struct ClaimAndClose<'info> {
@@ -58,18 +59,13 @@ pub struct ClaimAndClose<'info> {
 
 impl<'info> ClaimAndClose<'info> {
     pub fn claim_rewards_and_close(&mut self) -> Result<()> {
-        // Time in seconds for price feed from pyth
-        let maximum_age: u64 = 30;
-
         // Parse feed ID from hex
-        let feed_id: [u8; 32] = get_feed_id_from_hex(
-            "0xef0d8b6fda2ceba41da15d4095d1da392a0d2f8ed0c6c7bc0f4cfac8c280b56d",
-        )?;
+        let feed_id: [u8; 32] = get_feed_id_from_hex(SOL_ID)?;
 
         // Get the price update
         let price_data =
             self.price_update
-                .get_price_no_older_than(&Clock::get()?, maximum_age, &feed_id)?;
+                .get_price_no_older_than(&Clock::get()?, MAXIMUM_AGE, &feed_id)?;
 
         // Access the price
         let price: i64 = price_data.price;
