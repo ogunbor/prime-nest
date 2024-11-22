@@ -7,11 +7,14 @@ skip-lint = false
 [programs.localnet]
 prime_nest = "6iXEfCzmVMN8C5CgRSXpYPcUeRpLJu2o8R5M5uBpjDyt"
 
+[programs.devnet]
+prime_nest = "6iXEfCzmVMN8C5CgRSXpYPcUeRpLJu2o8R5M5uBpjDyt"
+
 [registry]
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "Localnet"
+cluster = "Devnet"
 wallet = "~/.config/solana/id.json"
 
 [scripts]
