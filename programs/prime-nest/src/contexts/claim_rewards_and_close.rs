@@ -59,6 +59,15 @@ pub struct ClaimAndClose<'info> {
 
 impl<'info> ClaimAndClose<'info> {
     pub fn claim_rewards_and_close(&mut self) -> Result<()> {
+        // Get the current on-chain timestamp
+        let clock = Clock::get()?;
+        let current_timestamp = clock.unix_timestamp;
+        // Ensure the vault has reached its expiration time
+        require!(
+            current_timestamp >= self.vault_state.expiration,
+            VaultError::VaultNotYetExpired
+        );
+
         // Parse feed ID from hex
         let feed_id: [u8; 32] = get_feed_id_from_hex(SOL_ID)?;
 
@@ -105,16 +114,6 @@ impl<'info> ClaimAndClose<'info> {
         mint_to(ctx, amount_to_mint)?;
 
         // 2: close the vault account and get lamports
-
-        // Get the current on-chain timestamp
-        let clock = Clock::get()?;
-        let current_timestamp = clock.unix_timestamp;
-        // Ensure the vault has reached its expiration time
-        require!(
-            current_timestamp >= self.vault_state.expiration,
-            VaultError::VaultNotYetExpired
-        );
-
         let cpi_program = self.system_program.to_account_info();
 
         let cpi_accounts = Transfer {
