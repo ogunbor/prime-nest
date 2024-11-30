@@ -1,7 +1,7 @@
 use anchor_lang::prelude::*;
 
 #[error_code]
-pub enum Errors {
+pub enum VaultError {
     #[msg("The vault has not yet expired")]
     VaultNotYetExpired,
     #[msg("Invalid withdrawal amount")]
@@ -24,4 +24,6 @@ pub enum Errors {
     InvalidPriceConversion,
     #[msg("Something went wrong")]
     CalcError,
+    #[msg("Overflow")]
+    ArithmeticOverflow,
 }
