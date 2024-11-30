@@ -99,15 +99,18 @@ impl<'info> ClaimAndClose<'info> {
         );
 
         let amount_to_mint = if self.vault_state.sol_price_at_initialization < sol_price_at_claim {
-            // Mint 10,000 more tokens if sol price at initialiazion is less
-            (self.vault_state.amount as u64
-                * self.vault_state.expiration as u64
-                * 10_u64.pow(self.rewards_mint.decimals as u32))
-                + 10_000
+            self.vault_state
+                .amount
+                .checked_mul(self.vault_state.expiration as u64)
+                .and_then(|res| res.checked_mul(10_u64.pow(self.rewards_mint.decimals as u32)))
+                .and_then(|res| res.checked_add(10_000))
+                .ok_or(VaultError::ArithmeticOverflow)?
         } else {
-            self.vault_state.amount as u64
-                * self.vault_state.expiration as u64
-                * 10_u64.pow(self.rewards_mint.decimals as u32)
+            self.vault_state
+                .amount
+                .checked_mul(self.vault_state.expiration as u64)
+                .and_then(|res| res.checked_mul(10_u64.pow(self.rewards_mint.decimals as u32)))
+                .ok_or(VaultError::ArithmeticOverflow)?
         };
 
         // Call the mint_to function with the calculated amount
